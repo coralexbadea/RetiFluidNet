@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import os
 from sklearn.model_selection import KFold
 from DataReader import DataReader
-from models import Unet
+from model import RetiFluidNet
 from losses import Losses, IntervalEvaluation
 from results import Results
 import glob
@@ -31,7 +31,7 @@ for path in glob.glob(path + '/*'):
 print("Number of cases : ", len(data_path))
 
 data_reader = DataReader()
-unet = Unet(4, (256,256,1))
+retiFluidNet = RetiFluidNet()()
 loss_funcs = Losses()
 my_results = Results()
 
@@ -79,7 +79,7 @@ for train_path, val_path in kf.split(data_path):
         val_data = val_data.batch(1).prefetch(buffer_size = AUTOTUNE)
         
         # with strategy.scope():
-        model = unet()
+        model = retiFluidNet()
         # model.summary()
 
         initial_learning_rate = 2e-4
