@@ -9,7 +9,7 @@ import random
     
 data_name = "Images"
 mask_name = "Masks"
-
+image_format = ".png"
 class DataReader:
   
     def get_masks(self, m):
@@ -40,7 +40,7 @@ class DataReader:
      
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -51,7 +51,6 @@ class DataReader:
 
 
     def load_image_rotate_5(self, path):
-      print("path", path)
       angle = 0.05
       #Read image
       image = tf.io.read_file(path)
@@ -62,7 +61,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -84,7 +83,7 @@ class DataReader:
      
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -107,7 +106,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -129,7 +128,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -151,7 +150,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -173,7 +172,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -196,7 +195,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -222,7 +221,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -246,7 +245,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -270,7 +269,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -294,7 +293,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -317,7 +316,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
@@ -338,7 +337,7 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, ".jpg", ".gif")
+      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_gif(mask)
       mask = tf.image.rgb_to_grayscale(mask)[0]
