@@ -9,7 +9,7 @@ import random
     
 data_name = "Images"
 mask_name = "Masks"
-image_format = ".png"
+image_format = "ok"
 class DataReader:
   
     def get_masks(self, m):
@@ -382,17 +382,17 @@ class DataReader:
         for idx in val_path:
             val_idx.append(data_path[idx])    
             
-        train_path = []
-        for path in train_idx:
-            for image_path in glob.glob(path + '/*'):
-                train_path.append(image_path)
+        # train_path = []
+        # for path in train_idx:
+        #     for image_path in glob.glob(path + '/*'):
+        #         train_path.append(image_path)
     
-        val_path = []
-        for path in val_idx:
-            for image_path in glob.glob(path + '/*'):
-                val_path.append(image_path)
-    
-        train_path = tf.data.Dataset.from_tensor_slices(train_path)            
-        val_path = tf.data.Dataset.from_tensor_slices(val_path)
-        
+        # val_path = []
+        # for path in val_idx:
+        #     for image_path in glob.glob(path + '/*'):
+        #         val_path.append(image_path)
+        # print("train path inside get train path", train_path)
+        train_path = tf.data.Dataset.from_tensor_slices(train_idx)            
+        val_path = tf.data.Dataset.from_tensor_slices(val_idx)
+        print("ok here ", train_path)
         return train_path, val_path
