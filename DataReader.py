@@ -7,8 +7,8 @@ import tensorflow_addons as tfa
 import random
 
     
-data_name = "retouch_data"
-mask_name = "retouch_data_mask"
+data_name = "Images"
+mask_name = "Masks"
 
 class DataReader:
   

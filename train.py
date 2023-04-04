@@ -21,7 +21,7 @@ import glob
 # In[]
 dataset_name = 'Spectralis'  #Spectralis # Cirrus #Topcon
 
-path = "RetouchData/" + dataset_name + "/retouch_data"   #Replace the main path of dataset
+path = "/content/Images"
 
 print("Dataset: {}".format(dataset_name))
 
