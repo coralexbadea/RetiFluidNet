@@ -27,6 +27,7 @@ print("Dataset: {}".format(dataset_name))
 
 data_path = []
 for path in glob.glob(path + '/*'):
+    print("for paths: ", path)
     data_path.append(path)    
 print("Number of cases : ", len(data_path))
 
