@@ -51,7 +51,7 @@ class DataReader:
 
 
     def load_image_rotate_5(self, path):
-    
+      print("path", path)
       angle = 0.05
       #Read image
       image = tf.io.read_file(path)
