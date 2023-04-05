@@ -32,7 +32,7 @@ for path in glob.glob(path + '/*'):
 print("Number of cases : ", len(data_path))
 
 data_reader = DataReader()
-retiFluidNet = RetiFluidNet()
+retiFluidNet = RetiFluidNet(num_class=8, input_shape=(256, 256, 3))
 loss_funcs = Losses()
 my_results = Results()
 
