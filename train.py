@@ -64,7 +64,6 @@ for train_path, val_path in kf.split(data_path):
     if i<=3:
     
         print("Starting Fold number {}".format(i))
-        print("paths", train_path, ",,", val_path)
         train_path, val_path = data_reader.get_trainPath_and_valPath(train_path, val_path, data_path) 
         train_data, val_data = data_reader.get_data_for_train(train_path, val_path)
         num_of_train_samples = len(train_data)

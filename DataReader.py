@@ -394,5 +394,4 @@ class DataReader:
         # print("train path inside get train path", train_path)
         train_path = tf.data.Dataset.from_tensor_slices(train_idx)            
         val_path = tf.data.Dataset.from_tensor_slices(val_idx)
-        print("ok here ", train_path)
         return train_path, val_path
