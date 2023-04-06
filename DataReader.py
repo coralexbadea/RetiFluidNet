@@ -40,10 +40,10 @@ class DataReader:
      
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      #mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      mask = tf.cast(image, tf.float32) / 255.0
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       
 
@@ -352,21 +352,21 @@ class DataReader:
         train_data_orig = train_path.map(self.load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
         val_data        = val_path.map(self.load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
         
-        train_data_con_p       = train_path.map(self.load_image_contrast_p, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_con_n       = train_path.map(self.load_image_contrast_n, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_1    = train_path.map(self.load_image_rotate_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_1_r  = train_path.map(self.load_image_rotate_1_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_2    = train_path.map(self.load_image_rotate_2, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_2_r  = train_path.map(self.load_image_rotate_2_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_5    = train_path.map(self.load_image_rotate_5, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_rotate_5_r  = train_path.map(self.load_image_rotate_5_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)    
-        train_data_fliplr      = train_path.map(self.load_image_fliplr, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_translate_1 = train_path.map(self.load_image_translate_1_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_translate_2 = train_path.map(self.load_image_translate_n_1_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_translate_3 = train_path.map(self.load_image_translate_1_n_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        train_data_translate_4 = train_path.map(self.load_image_translate_n_1_n_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_con_p       = train_path.map(self.load_image_contrast_p, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_con_n       = train_path.map(self.load_image_contrast_n, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_1    = train_path.map(self.load_image_rotate_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_1_r  = train_path.map(self.load_image_rotate_1_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_2    = train_path.map(self.load_image_rotate_2, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_2_r  = train_path.map(self.load_image_rotate_2_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_5    = train_path.map(self.load_image_rotate_5, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_rotate_5_r  = train_path.map(self.load_image_rotate_5_r, num_parallel_calls=tf.data.experimental.AUTOTUNE)    
+        # train_data_fliplr      = train_path.map(self.load_image_fliplr, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_translate_1 = train_path.map(self.load_image_translate_1_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_translate_2 = train_path.map(self.load_image_translate_n_1_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_translate_3 = train_path.map(self.load_image_translate_1_n_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        # train_data_translate_4 = train_path.map(self.load_image_translate_n_1_n_1, num_parallel_calls=tf.data.experimental.AUTOTUNE)
         
-        train_data = train_data_orig.concatenate(train_data_fliplr).concatenate(train_data_con_n).concatenate(train_data_rotate_1).concatenate(train_data_rotate_1_r).concatenate(train_data_rotate_2).concatenate(train_data_rotate_2_r).concatenate(train_data_rotate_5).concatenate(train_data_rotate_5_r).concatenate(train_data_translate_1).concatenate(train_data_translate_2).concatenate(train_data_translate_3).concatenate(train_data_translate_4)
+        train_data = train_data_orig#.concatenate(train_data_fliplr).concatenate(train_data_con_n).concatenate(train_data_rotate_1).concatenate(train_data_rotate_1_r).concatenate(train_data_rotate_2).concatenate(train_data_rotate_2_r).concatenate(train_data_rotate_5).concatenate(train_data_rotate_5_r).concatenate(train_data_translate_1).concatenate(train_data_translate_2).concatenate(train_data_translate_3).concatenate(train_data_translate_4)
         
         print("Number of training samples are {}".format(len(train_data)))
         print("Number of validation samples are {}".format(len(val_data)))
