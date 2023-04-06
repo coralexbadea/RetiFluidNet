@@ -40,10 +40,10 @@ class DataReader:
      
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      #mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      #
       mask = tf.io.read_file(mask_path)
       mask = tf.image.decode_png(mask, channels=1)  
-      mask = tf.cast(image, tf.float32) / 255.0
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       
 
@@ -61,10 +61,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -83,10 +83,10 @@ class DataReader:
      
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -106,10 +106,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -128,10 +128,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -150,10 +150,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -172,10 +172,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.rotate(mask, angle)
       # mask = self.get_masks(mask)
@@ -195,10 +195,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tf.image.flip_left_right(mask)
       # mask = self.get_masks(mask)      
@@ -221,10 +221,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.translate(mask, [a*translation, b*translation])
       # mask = self.get_masks(mask)
@@ -245,10 +245,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.translate(mask, [a*translation, b*translation])
       # mask = self.get_masks(mask)
@@ -269,10 +269,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.translate(mask, [a*translation, b*translation])
       # mask = self.get_masks(mask)
@@ -293,10 +293,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       mask = tfa.image.translate(mask, [a*translation, b*translation])
       # mask = self.get_masks(mask)
@@ -316,10 +316,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       # mask = self.get_masks(mask)
       
@@ -337,10 +337,10 @@ class DataReader:
     
       #Read mask
       mask_path = tf.strings.regex_replace(path, data_name, mask_name)
-      mask_path = tf.strings.regex_replace(mask_path, image_format, ".gif")
+      
       mask = tf.io.read_file(mask_path)
-      mask = tf.image.decode_gif(mask)
-      mask = tf.image.rgb_to_grayscale(mask)[0]
+      mask = tf.image.decode_png(mask, channels=1)  
+      
       mask = tf.image.resize(mask, [256, 256], method = 'nearest')
       # mask = self.get_masks(mask)
       
