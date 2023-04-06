@@ -81,7 +81,7 @@ for train_path, val_path in kf.split(data_path):
         # with strategy.scope():
         model = retiFluidNet()
         model.summary()
-
+        model(tf.random.uniform(shape=[1,256,256,3]))
         initial_learning_rate = 2e-4
         decay_steps = 10000
         decay_rate  = 0.98
