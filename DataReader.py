@@ -8,7 +8,7 @@ import random
 
     
 data_name = "Images"
-mask_name = "Masks"
+mask_name = "MasksRetiFluiNet"
 image_format = "ok"
 class DataReader:
   
