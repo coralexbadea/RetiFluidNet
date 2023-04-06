@@ -34,7 +34,7 @@ class DataReader:
     def load_image(self, path):    
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)   
+      image = tf.image.decode_png(image, channels=1)  
       image = tf.cast(image, tf.float32) / 255.0      
       image = tf.image.resize(image, [256, 256])
      
@@ -54,7 +54,7 @@ class DataReader:
       angle = 0.05
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -76,7 +76,7 @@ class DataReader:
       angle = -0.05
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image) 
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -99,7 +99,7 @@ class DataReader:
       angle = 0.02
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -121,7 +121,7 @@ class DataReader:
       angle = -0.02
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -143,7 +143,7 @@ class DataReader:
       angle = 0.01
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -165,7 +165,7 @@ class DataReader:
       angle = -0.01
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.rotate(image, angle)
@@ -188,7 +188,7 @@ class DataReader:
            
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tf.image.flip_left_right(image)  
@@ -213,7 +213,7 @@ class DataReader:
       b = 1
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.translate(image, [a*translation, b*translation])
@@ -238,7 +238,7 @@ class DataReader:
       b = 1
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.translate(image, [a*translation, b*translation])
@@ -262,7 +262,7 @@ class DataReader:
       b = -1
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image) 
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.translate(image, [a*translation, b*translation])
@@ -286,7 +286,7 @@ class DataReader:
       b = -1
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
       image = tfa.image.translate(image, [a*translation, b*translation])
@@ -309,7 +309,7 @@ class DataReader:
       contrast_factor = 0.5
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.image.adjust_contrast(image, contrast_factor)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
@@ -330,7 +330,7 @@ class DataReader:
       contrast_factor = 1.2
       #Read image
       image = tf.io.read_file(path)
-      image = tf.image.decode_jpeg(image)
+      image = tf.image.decode_png(image, channels=1)
       image = tf.image.adjust_contrast(image, contrast_factor)
       image = tf.cast(image, tf.float32) / 255.0
       image = tf.image.resize(image, [256, 256])
