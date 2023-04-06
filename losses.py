@@ -301,7 +301,7 @@ class Losses:
 
     @tf.function
     def training_loss(self, y_true, y_pred):
-       
+        print("entering loss unfc")
         start = time.time()
         y_true_bicon = tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4)
 

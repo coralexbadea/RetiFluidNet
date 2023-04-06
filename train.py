@@ -32,7 +32,7 @@ for path in glob.glob(path + '/*'):
 print("Number of cases : ", len(data_path))
 
 data_reader = DataReader()
-retiFluidNet = RetiFluidNet(num_class=8, input_shape=(256, 256, 3))
+retiFluidNet = RetiFluidNet(input_shape=(256, 256, 3))
 loss_funcs = Losses()
 my_results = Results()
 
@@ -43,7 +43,7 @@ last_epoch = 20
 
 SEED = 100
 NUM_EPOCHS = 10
-BATCH_SIZE = 4#*nb_GPUs
+BATCH_SIZE = 1#*nb_GPUs
 BUFFER_SIZE = 10000
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
