@@ -81,7 +81,7 @@ for train_path, val_path in kf.split(data_path):
         # with strategy.scope():
         model = retiFluidNet()
         model.summary()
-        model(tf.random.uniform(shape=[1,256,256,3]))
+       
         initial_learning_rate = 2e-4
         decay_steps = 10000
         decay_rate  = 0.98
@@ -124,24 +124,24 @@ for train_path, val_path in kf.split(data_path):
                 print("No history file is found.") 
         
         # plot learning curves
-        # if train_falg:
-        #     fig, axs = plt.subplots(1, 2, figsize=(12, 5))
-        #     fig.suptitle('Learning Curves')
+        if train_falg:
+            fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+            fig.suptitle('Learning Curves')
             
-        #     axs[0].set_title('Model Loss')
-        #     axs[0].plot(history.history['loss'], label='train')
-        #     axs[0].plot(history.history['val_loss'], label='val')
-        #     axs[0].legend()
-        #     axs[0].set(xlabel='Epoch', ylabel='Overall-Loss')
+            axs[0].set_title('Model Loss')
+            axs[0].plot(history.history['loss'], label='train')
+            axs[0].plot(history.history['val_loss'], label='val')
+            axs[0].legend()
+            axs[0].set(xlabel='Epoch', ylabel='Overall-Loss')
             
-        #     axs[1].set_title('Model Dice Performance')
-        #     axs[1].plot(history.history['main_output_dice_coeff'], label='train')
-        #     axs[1].plot(history.history['val_main_output_dice_coeff'], label='val')
-        #     axs[1].legend() 
-        #     axs[1].set(xlabel='Epoch', ylabel='Main output dice_coeff')
+            axs[1].set_title('Model Dice Performance')
+            axs[1].plot(history.history['main_output_dice_coeff'], label='train')
+            axs[1].plot(history.history['val_main_output_dice_coeff'], label='val')
+            axs[1].legend() 
+            axs[1].set(xlabel='Epoch', ylabel='Main output dice_coeff')
             
-        #     plt.show()
-        #     fig.savefig(dataset_name+"\model_%s_history.png"%i, dpi=300)
+            plt.show()
+            fig.savefig(dataset_name+"\model_%s_history.png"%i, dpi=300)
         
         
         # val_data = val_data.take(900)
@@ -150,7 +150,7 @@ for train_path, val_path in kf.split(data_path):
         for image, mask in tqdm(val_data):  
             temp = model.predict(image)[:, :, :, 0:32]
             predictions.append(temp)
-        #print("predictions shape : " , predictions.shape)
+        print("predictions shape : " , predictions.shape)
         acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean = my_results.results_per_layer(predictions, val_data)
         overall_results.append([acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean])
     
