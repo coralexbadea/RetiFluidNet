@@ -1,23 +1,22 @@
-import numpy as np
-import tensorflow as tf
-from sklearn import metrics
-from tensorflow.keras import backend as K
-from sklearn.metrics import confusion_matrix
-from tabulate import tabulate
-from sklearn import  metrics
-from tqdm import tqdm
+import numpy as np #import numpy as np
+import tensorflow as tf # import tensorflow as tf
+from sklearn import metrics # from sklearn import metrics
+from tensorflow.keras import backend as K #from tensorflow.keras import backend as K 
+from sklearn.metrics import confusion_matrix #sklearn metrics confusion matrix
+from tabulate import tabulate #
+from tqdm import tqdm #import tqdm for progressbar
 
 
-class Results:
+class Results:# class for working with the results
     
     def __init__(self):
-        self.layers_names = ['background', 'IRF', 'SRF', 'PED']
+        self.layers_names = ['background', 'IRF', 'SRF', 'PED'] # we have 4 layers and 4 classes obv
     
     
-    def recall(self, predictions, labels):  
+    def recall(self, predictions, labels): # takes predictions and labels 
         #print("recall")      
-        recall_ = {}            
-        for i in range(labels.shape[-1]):            
+        recall_ = {}     #computing recall        
+        for i in range(labels.shape[-1]): # the number            
             label_1D = K.flatten(labels[:, :, i])
             pred_1D  = K.flatten(predictions[:, :, i])
             recall_[self.layers_names[i]] = metrics.recall_score(label_1D,pred_1D, labels=np.unique(pred_1D))                
@@ -106,7 +105,7 @@ class Results:
         return iou 
            
     
-    def results_per_layer(self, predictions, labels):
+    def results_per_layer(self, predictions, val_data):
         
         predictions = np.array(predictions)
         print(predictions.shape)
@@ -145,10 +144,11 @@ class Results:
             
         
         labels_ = []
-        for image, label in labels:    
+        for image, label in val_data:    
             label = tf.squeeze(label)
             labels_.append(tf.keras.backend.one_hot(tf.cast(label, 'int32'),num_classes = 4)) 
-        print("\n")    
+        print("\n") 
+        print("labels_ shape:->>",labels_.shape)  
         for predicted_mask in tqdm(range(predictions.shape[0])):
             acc_value.append(self.accuracy(predictions[predicted_mask], labels_[predicted_mask]))
             f1_score_value.append(self.f1_score(predictions[predicted_mask], labels_[predicted_mask]))
