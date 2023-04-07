@@ -328,10 +328,11 @@ class Losses:
             output_bicon_2 = bicon_output[:, :, :, 8:16]  #IRF
             output_bicon_3 = bicon_output[:, :, :, 16:24] #SRF
             output_bicon_4 = bicon_output[:, :, :, 24:32] #PED
-            loss_bicon_1 = self.bicon_loss_new(y_true_bicon[:, :, :, 0], output_bicon_1) #Background with Layer 0 of ground truth, shape of y_true_bicon[:, :, :, 0] : batchsize * 256 * 256
-            loss_bicon_2 = self.bicon_loss_new(y_true_bicon[:, :, :, 1], output_bicon_2) #IRF with Layer 1 of ground truth, shape of y_true_bicon[:, :, :, 1]        : batchsize * 256 * 256
-            loss_bicon_3 = self.bicon_loss_new(y_true_bicon[:, :, :, 2], output_bicon_3) #SRF with Layer 2 of ground truth, shape of y_true_bicon[:, :, :, 2]        : batchsize * 256 * 256
-            loss_bicon_4 = self.bicon_loss_new(y_true_bicon[:, :, :, 3], output_bicon_4) #PED with Layer 3 of ground truth, shape of y_true_bicon[:, :, :, 3]        : batchsize * 256 * 256
+            ## IDK here I changed all from y_true_bicon[:, :, :, 0] to y_true_bicon[ :, :, 0]
+            loss_bicon_1 = self.bicon_loss_new(y_true_bicon[ :, :, 0], output_bicon_1) #Background with Layer 0 of ground truth, shape of y_true_bicon[:, :, :, 0] : batchsize * 256 * 256
+            loss_bicon_2 = self.bicon_loss_new(y_true_bicon[ :, :, 1], output_bicon_2) #IRF with Layer 1 of ground truth, shape of y_true_bicon[:, :, :, 1]        : batchsize * 256 * 256
+            loss_bicon_3 = self.bicon_loss_new(y_true_bicon[ :, :, 2], output_bicon_3) #SRF with Layer 2 of ground truth, shape of y_true_bicon[:, :, :, 2]        : batchsize * 256 * 256
+            loss_bicon_4 = self.bicon_loss_new(y_true_bicon[ :, :, 3], output_bicon_4) #PED with Layer 3 of ground truth, shape of y_true_bicon[:, :, :, 3]        : batchsize * 256 * 256
             bicon_loss["decoder_" + str(i)] = 1.   * (loss_bicon_1 + loss_bicon_2 + loss_bicon_3 + loss_bicon_4)
          
         stop = time.time() 
