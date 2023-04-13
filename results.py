@@ -1,22 +1,24 @@
-import numpy as np #import numpy as np
-import tensorflow as tf # import tensorflow as tf
-from sklearn import metrics # from sklearn import metrics
-from tensorflow.keras import backend as K #from tensorflow.keras import backend as K 
-from sklearn.metrics import confusion_matrix #sklearn metrics confusion matrix
-from tabulate import tabulate #
-from tqdm import tqdm #import tqdm for progressbar
+import numpy as np
+import tensorflow as tf
+from sklearn import metrics
+from tensorflow.keras import backend as K
+from sklearn.metrics import confusion_matrix
+from tabulate import tabulate #print tabular data
+from sklearn import  metrics
+from tqdm import tqdm
 
 
-class Results:# class for working with the results
+class Results: # class responsible for results
     
     def __init__(self):
-        self.layers_names = ['background', 'IRF', 'SRF', 'PED'] # we have 4 layers and 4 classes obv
+        self.layers_names = ['background', 'IRF', 'SRF', 'PED'] # the layer names
     
     
-    def recall(self, predictions, labels): # takes predictions and labels 
+    def recall(self, predictions, labels):  # function for recall
         #print("recall")      
-        recall_ = {}     #computing recall        
-        for i in range(labels.shape[-1]): # the number            
+        recall_ = {}            #recall computed here
+        print("labels here!!!",labels.shape)
+        for i in range(labels.shape[-1]):             # for each label
             label_1D = K.flatten(labels[:, :, i])
             pred_1D  = K.flatten(predictions[:, :, i])
             recall_[self.layers_names[i]] = metrics.recall_score(label_1D,pred_1D, labels=np.unique(pred_1D))                

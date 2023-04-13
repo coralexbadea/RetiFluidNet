@@ -1,24 +1,21 @@
-
-# In[]
 import warnings
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore") #ignore all warnings (so peacefull)
 from tqdm import tqdm
 import numpy as np
-from silence_tensorflow import silence_tensorflow
-silence_tensorflow()
-import tensorflow as tf
-tf.random.set_seed(12345)
+from silence_tensorflow import silence_tensorflow #no warnings (lol they have that)
+silence_tensorflow()# call it
+import tensorflow as tf # tensorflow
+tf.random.set_seed(12345) # set random 
 # import tensorflow_addons as tfa
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt 
 import os
-from sklearn.model_selection import KFold
-from DataReader import DataReader
-from model import RetiFluidNet
-from losses import Losses, IntervalEvaluation
-from results import Results
+from sklearn.model_selection import KFold #Kfold 
+from DataReader import DataReader #importing our data reader
+from model import RetiFluidNet # the model
+from losses import Losses, IntervalEvaluation #losses and evaluation
+from results import Results # results 
 import glob
 
-# In[]
 dataset_name = 'Spectralis'  #Spectralis # Cirrus #Topcon
 
 path = "/content/Images"
@@ -81,7 +78,7 @@ for train_path, val_path in kf.split(data_path):
         # with strategy.scope():
         model = retiFluidNet()
         model.summary()
-       
+        #model(tf.random.uniform(shape=[1,256,256,3]))
         initial_learning_rate = 2e-4
         decay_steps = 10000
         decay_rate  = 0.98
