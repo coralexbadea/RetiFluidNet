@@ -3,130 +3,129 @@ from tensorflow.keras import backend as K
 import numpy as np
 import time
 
-class Losses:
+class Losses: #class to handle those losses
     
     def __init__(self):
-        self.loss =  tf.keras.losses.BinaryCrossentropy()
+        self.loss =  tf.keras.losses.BinaryCrossentropy() #BCE simple enough
     
     @tf.function   
-    def dice_coeff(self, y_true, y_pred):
-        smooth = 1.
+    def dice_coeff(self, y_true, y_pred): # dice coeff it takes y_true and y_pred
+        smooth = 1. #smooth
         # Flatten
-        y_true_f = tf.reshape(tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4), [-1])
-        y_pred_f = tf.reshape(y_pred, [-1])
-        intersection = tf.reduce_sum(y_true_f * y_pred_f)
-        score = (2. * intersection + smooth) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + smooth)
-        return score
+        y_true_f = tf.reshape(tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4), [-1]) #it seems that we use onehot for 4 classes then flatten
+        y_pred_f = tf.reshape(y_pred, [-1]) #flatten predicted 
+        intersection = tf.reduce_sum(y_true_f * y_pred_f) # elementwise product then sum; they are one hot encoded, the sum will be big if they intersect
+        score = (2. * intersection + smooth) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + smooth) # it seems that we compute score (2*intersection+smooth)/(y_pred+y+smooth)
+        return score #return score
     
     @tf.function
-    def dice_coeff_bicon(self, y_true, y_pred):
+    def dice_coeff_bicon(self, y_true, y_pred): #dice coeff bicon
         smooth = 1.
         # Flatten
-        y_true_f = tf.reshape(y_true, [-1])
-        y_pred_f = tf.reshape(y_pred, [-1])
-        intersection = tf.reduce_sum(y_true_f * y_pred_f)
-        score = (2. * intersection + smooth) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + smooth)
+        y_true_f = tf.reshape(y_true, [-1]) #flatten
+        y_pred_f = tf.reshape(y_pred, [-1]) #flatten
+        intersection = tf.reduce_sum(y_true_f * y_pred_f) #again intersection
+        score = (2. * intersection + smooth) / (tf.reduce_sum(y_true_f) + tf.reduce_sum(y_pred_f) + smooth) #again score
         return score
     
     @tf.function 
-    def iou_loss(self,y_true, y_pred):
-        y_true_f=tf.reshape(tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4), [-1])
+    def iou_loss(self,y_true, y_pred): #iou loss - it computes 1 - intersection over union
+        y_true_f=tf.reshape(tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4), [-1]) #again seems on hot encoding and flatten
         y_pred_f=tf.reshape(y_pred, [-1])
-        inter=tf.reduce_sum(tf.multiply(y_pred_f,y_true_f))
-        union=tf.reduce_sum(tf.subtract (tf.add(y_pred_f,y_true_f),tf.multiply(y_pred_f,y_true_f)))
-        loss=tf.subtract(tf.constant(1.0, dtype=tf.float32),tf.divide(inter,union))
+        inter=tf.reduce_sum(tf.multiply(y_pred_f,y_true_f))#intersection as multiplication
+        union=tf.reduce_sum(tf.subtract (tf.add(y_pred_f,y_true_f),tf.multiply(y_pred_f,y_true_f))) # union as addition - multiplication
+        loss=tf.subtract(tf.constant(1.0, dtype=tf.float32),tf.divide(inter,union)) #1 - actual iou because we minimize
         return loss
     
     @tf.function    
-    def dice_loss(self, y_true, y_pred):
+    def dice_loss(self, y_true, y_pred): #this is dice loss = 1 - dice_coeff
         loss = 1 - self.dice_coeff(y_true, y_pred)
         return loss
     
     @tf.function    
-    def dice_loss_bicon(self, y_true, y_pred):
+    def dice_loss_bicon(self, y_true, y_pred): #bicon loss
         loss = 1 - self.dice_coeff_bicon(y_true, y_pred)
         return loss
     
-    @tf.function
-    def dice_loss_scale4(self, y_true, y_pred):
+    @tf.function 
+    def dice_loss_scale4(self, y_true, y_pred): #dice loss but scalled 1/8
         alpha = 1/8.0
         loss = 1 - self.dice_coeff(y_true, y_pred)
         return alpha*loss
     
     @tf.function
-    def dice_loss_scale3(self, y_true, y_pred):
+    def dice_loss_scale3(self, y_true, y_pred): #dice loss but scalled 1/4
         alpha = 1/4.0
         loss = 1 - self.dice_coeff(y_true, y_pred)
         return alpha*loss
     
-    @tf.function
-    def dice_loss_scale2(self, y_true, y_pred):
+    @tf.function 
+    def dice_loss_scale2(self, y_true, y_pred): #dice loss but scalled 1/2
         alpha = 1/2.0
         loss = 1 - self.dice_coeff(y_true, y_pred)
         return alpha*loss
     
     @tf.function
-    def dice_loss_scale1(self, y_true, y_pred):
+    def dice_loss_scale1(self, y_true, y_pred): #dice loss but scalled 1/1
         alpha = 1/1.0
         loss = 1 - self.dice_coeff(y_true, y_pred)
         return alpha*loss
     
     @tf.function
-    def bce_dice_loss(self,y_true, y_pred):
+    def bce_dice_loss(self,y_true, y_pred): # we add CE, diceloss and iou loss
         loss = tf.keras.losses.sparse_categorical_crossentropy(y_true, y_pred) + self.dice_loss(y_true, y_pred) + self.iou_loss(y_true, y_pred)
         return loss
     
-    def tversky(self, y_true, y_pred):
+    def tversky(self, y_true, y_pred): #https://en.wikipedia.org/wiki/Tversky_index
         smooth=1
         alpha=0.99
         y_true_pos = tf.reshape(tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4), [-1])
         y_pred_pos = tf.reshape(y_pred, [-1])      
-        true_pos = K.sum(y_true_pos * y_pred_pos)
-        false_neg = K.sum(y_true_pos * (1 - y_pred_pos))
-        false_pos = K.sum((1 - y_true_pos) * y_pred_pos)
-        return (true_pos + smooth) / (true_pos + alpha * false_neg + (1 - alpha) * false_pos + smooth)
+        true_pos = K.sum(y_true_pos * y_pred_pos) # true positives
+        false_neg = K.sum(y_true_pos * (1 - y_pred_pos)) # false negatives
+        false_pos = K.sum((1 - y_true_pos) * y_pred_pos) # false posives
+        return (true_pos + smooth) / (true_pos + alpha * false_neg + (1 - alpha) * false_pos + smooth) # this formula is like a similarity measure between sets, in this case masks 
 
     def tversky_loss(self, y_true, y_pred):
-        return 1 - self.tversky(y_true, y_pred)
+        return 1 - self.tversky(y_true, y_pred) # 1 - tversky for minimization
 
     def focal_tversky_loss(self, y_true,y_pred):
-        pt_1 = self.tversky(y_true, y_pred)       
-        gamma = 0.75
-        focal_weight = K.clip((1-pt_1), K.epsilon(), 1.0)
-        return K.pow(focal_weight, gamma)
+        pt_1 = self.tversky(y_true, y_pred) # compute tversky  
+        gamma = 0.75 # compute gamma
+        focal_weight = K.clip((1-pt_1), K.epsilon(), 1.0) #K clip the tversky loss between K.epsilon() and 1
+        return K.pow(focal_weight, gamma) # we have also a power 0.75 for some reason
 
     def Focaltver_CEsparse_loss(self, y_true, y_pred):
         loss = 1 * (tf.keras.losses.sparse_categorical_crossentropy(y_true, y_pred) + 0.5 * self.focal_tversky_loss(y_true, y_pred))
         return loss
 
-    def gen_dice(self, y_true, y_pred, eps=1e-6):
+    def gen_dice(self, y_true, y_pred, eps=1e-6): # gen_dice funtion takes y_true,y_pred and eps1e-6
         """both tensors are [b, h, w, classes] and y_pred is in logit form"""
 
-        # [b, h, w, classes]
+        # [b, h, w, classes] #onehot y_true
         y_true = tf.keras.backend.one_hot(tf.cast(y_true, 'int32'),num_classes = 4)
         y_true_shape = tf.shape(y_true)
 
-        # [b, h*w, classes]
+        # [b, h*w, classes] # reshape
         y_true = tf.reshape(y_true, [-1, y_true_shape[1]*y_true_shape[2], y_true_shape[3]])
         y_pred = tf.reshape(y_pred, [-1, y_true_shape[1]*y_true_shape[2], y_true_shape[3]])
 
-        # [b, classes]
+        # [b, classes] 
         # count how many of each class are present in 
         # each image, if there are zero, then assign
         # them a fixed weight of eps
-        counts = tf.reduce_sum(y_true, axis=1)
-        weights = 1. / (counts ** 4)
-        weights = tf.where(tf.math.is_finite(weights), weights, eps)
+        counts = tf.reduce_sum(y_true, axis=1) #count in one hot encoding fashion
+        weights = 1. / (counts ** 4) # the many they are the less it weights, for some reason we also have power 4
+        weights = tf.where(tf.math.is_finite(weights), weights, eps) # ah if there are no image the weight will be infinite so we put epsilon there, cool
 
-        multed = tf.reduce_sum(y_true * y_pred, axis=1)
-        summed = tf.reduce_sum(y_true + y_pred, axis=1)
+        multed = tf.reduce_sum(y_true * y_pred, axis=1) #multiply y_pred and y_true
+        summed = tf.reduce_sum(y_true + y_pred, axis=1) #sum y_pred and y_true
 
-        # [b]
-        numerators = tf.reduce_sum(weights*multed, axis=-1)
-        denom = tf.reduce_sum(weights*summed, axis=-1)
-        dices = 1. - 2. * numerators / denom
-        dices = tf.where(tf.math.is_finite(dices), dices, tf.zeros_like(dices))
-        return tf.reduce_mean(dices)
+        numerators = tf.reduce_sum(weights*multed, axis=-1) # we weight the intersection between y_true and predicted
+        denom = tf.reduce_sum(weights*summed, axis=-1) # also for summation I think it is [b,w,h,1]
+        dices = 1. - 2. * numerators / denom # we compute this dice factor, if should me minimum if simmilar images, I think
+        dices = tf.where(tf.math.is_finite(dices), dices, tf.zeros_like(dices)) #put 0 if -inf
+        return tf.reduce_mean(dices) #perform reduce_mean we reduce it all to a single number!!!, what?
     
     @tf.function
     def edge_loss(self, glo_map,vote_out,edge,target):

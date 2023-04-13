@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np 
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import os
@@ -10,9 +10,9 @@ import random
 data_name = "Images"
 mask_name = "MasksRetiFluiNet"
 image_format = "ok"
-class DataReader:
+class DataReader: #reader for data
   
-    def get_masks(self, m):
+    def get_masks(self, m):  # it already seems that that we are copying the mas 5 times, for 4 outputs and one main idk.
       """
         ،This function return a dict of masks which we need this to create the labels vectors as
         it is needed to feed it to the model.
@@ -31,7 +31,7 @@ class DataReader:
       return mask
 
 
-    def load_image(self, path):    
+    def load_image(self, path):  #simple load of image   
       #Read image
       image = tf.io.read_file(path)
       image = tf.image.decode_png(image, channels=1)  
@@ -50,7 +50,7 @@ class DataReader:
       return image, mask
 
 
-    def load_image_rotate_5(self, path):
+    def load_image_rotate_5(self, path): #simple load of image augmented, ibk maybe for memory reasons
       angle = 0.05
       #Read image
       image = tf.io.read_file(path)
@@ -347,7 +347,7 @@ class DataReader:
       return image, mask
 
 
-    def get_data_for_train(self, train_path, val_path):
+    def get_data_for_train(self, train_path, val_path): #this gets dataset objects with paths and this will map image_loads
         
         train_data_orig = train_path.map(self.load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
         val_data        = val_path.map(self.load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
@@ -373,7 +373,7 @@ class DataReader:
         
         return train_data, val_data
 
-    def get_trainPath_and_valPath(self, train_path, val_path, data_path):
+    def get_trainPath_and_valPath(self, train_path, val_path, data_path): # get paths into dataset Objects
         
         train_idx, val_idx = [], []
         for idx in train_path:

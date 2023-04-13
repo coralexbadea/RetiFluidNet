@@ -22,21 +22,21 @@ path = "/content/Images"
 
 print("Dataset: {}".format(dataset_name))
 
-data_path = []
+data_path = [] #paths to images 
 for path in glob.glob(path + '/*'):
     print("for paths: ", path)
     data_path.append(path)    
 print("Number of cases : ", len(data_path))
 
-data_reader = DataReader()
-retiFluidNet = RetiFluidNet(input_shape=(256, 256, 1))
-loss_funcs = Losses()
-my_results = Results()
+data_reader = DataReader() # datareader
+retiFluidNet = RetiFluidNet(input_shape=(256, 256, 1)) #retifluidnet class that will spit a model when called
+loss_funcs = Losses() #loses
+my_results = Results() #results
 
 
-train_falg = 1
-do_continue = False
-last_epoch = 20
+train_falg = 1 # training
+do_continue = False # continue
+last_epoch = 20 #last_epoch
 
 SEED = 100
 NUM_EPOCHS = 1
@@ -44,25 +44,24 @@ BATCH_SIZE = 1#*nb_GPUs
 BUFFER_SIZE = 10000
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
-# In[]: Main Loop
-kf = KFold(n_splits = 3, shuffle=False)
+kf = KFold(n_splits = 3, shuffle=False) # the kfold into 3
 i = 3
-overall_results = []
+overall_results = [] # overall results
 
 
-def decay_schedule(epoch, lr):
+def decay_schedule(epoch, lr): # lr decay schedule
     if (epoch % 5 == 0) and (epoch != 0):
         lr = lr * 0.8
     return lr
 
 
-for train_path, val_path in kf.split(data_path): 
+for train_path, val_path in kf.split(data_path): # train_path, val path
     tf.random.set_seed(12345)
-    if i<=3:
+    if i<=3: # to it 3 times
     
-        print("Starting Fold number {}".format(i))
-        train_path, val_path = data_reader.get_trainPath_and_valPath(train_path, val_path, data_path) 
-        train_data, val_data = data_reader.get_data_for_train(train_path, val_path)
+        print("Starting Fold number {}".format(i)) # we are at fold no i
+        train_path, val_path = data_reader.get_trainPath_and_valPath(train_path, val_path, data_path) # get train val paths
+        train_data, val_data = data_reader.get_data_for_train(train_path, val_path) #get train_data and val_data. train_data[0] spits image and mask
         num_of_train_samples = len(train_data)
         num_of_val_samples = len(val_data)
         for image, mask in val_data.skip(5).take(1):
@@ -72,30 +71,30 @@ for train_path, val_path in kf.split(data_path):
             test_mask = mask
 
         # print("Starting Fold number {}".format(i))
-        train_data = train_data.shuffle(buffer_size=BUFFER_SIZE, seed=SEED).batch(BATCH_SIZE).prefetch(buffer_size = AUTOTUNE)
-        val_data = val_data.batch(1).prefetch(buffer_size = AUTOTUNE)
+        train_data = train_data.shuffle(buffer_size=BUFFER_SIZE, seed=SEED).batch(BATCH_SIZE).prefetch(buffer_size = AUTOTUNE) #batch and prefetch using AUTOTUNE
+        val_data = val_data.batch(1).prefetch(buffer_size = AUTOTUNE) #BZ of 1 and AUTOTUNE prefetch
         
         # with strategy.scope():
-        model = retiFluidNet()
-        model.summary()
+        model = retiFluidNet() # model of retifluidnet
+        model.summary() #summary
         #model(tf.random.uniform(shape=[1,256,256,3]))
-        initial_learning_rate = 2e-4
-        decay_steps = 10000
-        decay_rate  = 0.98
+        initial_learning_rate = 2e-4 #lr
+        decay_steps = 10000 #decay steps but we are not using this
+        decay_rate  = 0.98 # decay rate but we are not using this one
         
-        lr_scheduler = tf.keras.callbacks.LearningRateScheduler(decay_schedule)
+        lr_scheduler = tf.keras.callbacks.LearningRateScheduler(decay_schedule) # lr schedule
 
         
-        if not os.path.exists(dataset_name):
-            os.mkdir(dataset_name)
+        if not os.path.exists(dataset_name): # exists dataset
+            os.mkdir(dataset_name) #mkdir datasetname to save model and stuff
         
         # Creating Callbacks
-        checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(dataset_name+"/model_%s_checkpoint.hdf5"%i,save_best_only=True) 
+        checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(dataset_name+"/model_%s_checkpoint.hdf5"%i,save_best_only=True) #checkpoint to save model
                                                             
         
-        model.compile(optimizer = tf.keras.optimizers.RMSprop(initial_learning_rate), 
-                      loss = loss_funcs.training_loss,
-                       metrics = [loss_funcs.dice])
+        model.compile(optimizer = tf.keras.optimizers.RMSprop(initial_learning_rate), #RMS prop
+                      loss = loss_funcs.training_loss, # training loss from loss funcs
+                       metrics = [loss_funcs.dice]) #the dice loss from loss funcs
         
         if train_falg:
             ival = IntervalEvaluation(validation_data=val_data)
