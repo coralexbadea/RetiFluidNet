@@ -128,29 +128,30 @@ class Losses: #class to handle those losses
         return tf.reduce_mean(dices) #perform reduce_mean we reduce it all to a single number!!!, what?
     
     @tf.function
-    def edge_loss(self, glo_map,vote_out,edge,target):
+    def edge_loss(self, glo_map,vote_out,edge,target):#edge loss, glo_map,vote_out,edge,target
       #  start = time.time()
-        pred_mask_min  = tf.math.reduce_min(vote_out , axis = -1)
+        print("from edge_loss line 133, edges are", edge)
+        pred_mask_min  = tf.math.reduce_min(vote_out , axis = -1) #min of channels 
         # pred_mask_max  = tf.math.reduce_max(vote_out , axis = -1)
-        pred_mask_min  = 1 - pred_mask_min
-        pred_mask_min  = pred_mask_min * edge
+        pred_mask_min  = 1 - pred_mask_min # 1 - min
+        pred_mask_min  = pred_mask_min * edge  #multiply by edge idk waht that is
         decouple_map   = glo_map*(1-edge)+pred_mask_min
        # stop = time.time()
         #print("Esp Time For edge_loss : ", stop - start)
-        minloss = self.loss(target, decouple_map)
+        minloss = self.loss(target, decouple_map) #BCE od decouple map, so it seems to be the edge path of Ldecouple
         return minloss
                
     @tf.function          
-    def Bilater_voting(self, c_map,hori_translation,verti_translation):
+    def Bilater_voting(self, c_map,hori_translation,verti_translation): #bilateral voting function
         
         #start = time.time()
-        _, row, column, channel = c_map.shape
+        _, row, column, channel = c_map.shape # so we have the C volume that we know (see Bicon loss word doc)
         #vote_out = tf.zeros(shape = [row, column, channel])
         
-        right        = tf.matmul(c_map[ :, :, :, 4],hori_translation)
-        left         = tf.matmul (c_map[:, :, :, 3],tf.transpose(hori_translation, perm = [1, 0]))
-        left_bottom  = tf.matmul(tf.transpose(verti_translation, perm = [1, 0]), c_map[:, :,:, 5]) 
-        left_bottom  = tf.matmul(left_bottom,tf.transpose(hori_translation, perm = [1, 0]))
+        right        = tf.matmul(c_map[ :, :, :, 4],hori_translation) # the right tabular neighbor
+        left         = tf.matmul (c_map[:, :, :, 3],tf.transpose(hori_translation, perm = [1, 0]))# the left tabular neighbor
+        left_bottom  = tf.matmul(tf.transpose(verti_translation, perm = [1, 0]), c_map[:, :,:, 5]) # the left_bottom tabular neighbor
+        left_bottom  = tf.matmul(left_bottom,tf.transpose(hori_translation, perm = [1, 0])) #etc.
         right_above  = tf.matmul(verti_translation, c_map[:,:,:, 2])
         right_above  = tf.matmul(right_above,hori_translation)
         left_above   = tf.matmul(verti_translation, c_map[:,:,:, 0])
@@ -160,7 +161,7 @@ class Losses: #class to handle those losses
         right_bottom = tf.matmul(tf.transpose(verti_translation, perm = [1, 0]), c_map[:,:,:, 7])
         right_bottom = tf.matmul(right_bottom,hori_translation)
         
-        a1 = tf.multiply(c_map[:,:,:, 3], right)       
+        a1 = tf.multiply(c_map[:,:,:, 3], right)       #bilateral voting
         a2 = tf.multiply(c_map[:,:,:, 4], left)
         a3 = tf.multiply(c_map[:,:,:, 1], bottom)
         a4 = tf.multiply(c_map[:,:,:, 6], up)
@@ -169,20 +170,20 @@ class Losses: #class to handle those losses
         a7 = tf.multiply(c_map[:,:,:, 0], right_bottom)
         a8 = tf.multiply(c_map[:,:,:, 7], left_above)
         
-        vote_out = tf.stack([a7, a3, a5, a1, a2, a6, a4, a8], axis = -1)
+        vote_out = tf.stack([a7, a3, a5, a1, a2, a6, a4, a8], axis = -1) #stack then in new tabular
        # stop = time.time()
         #print("Esp Time For Bilater_voting : ", stop - start)
-        return vote_out  
+        return vote_out  #this is called vote_out
     
-    def sal2conn(self, mask):
+    def sal2conn(self, mask): #converts saliency mask into conectivity mask
         ## converte the saliency mask into a connectivity mask
         ## mask shape: H*W, output connectivity shape: H*W*8
-        mask        = np.squeeze(np.array(mask))        
+        mask        = np.squeeze(np.array(mask)) #        
         if len(mask.shape) == 2:
             mask = tf.expand_dims(mask, 0)
             
-        batch, rows, cols  = mask.shape
-        conn        = np.zeros(shape = (batch, rows, cols, 8))
+        batch, rows, cols  = mask.shape #get batch rows columns
+        conn        = np.zeros(shape = (batch, rows, cols, 8)) # connectivity map
         up          = np.zeros(shape = (batch, rows, cols))#move the orignal mask to up
         down        = np.zeros(shape = (batch, rows, cols))
         left        = np.zeros(shape = (batch, rows, cols))
@@ -201,7 +202,7 @@ class Losses: #class to handle those losses
         down_left[:,1:rows,0:cols-1] = mask[:,0:rows-1,1:cols]
         down_right[:,1:rows,1:cols]  = mask[:,0:rows-1,0:cols-1]  
         
-        conn[:,:,:,0] = mask*down_right
+        conn[:,:,:,0] = mask*down_right # it seems that if we have 0 on mask then we put 0
         conn[:,:,:,1] = mask*down
         conn[:,:,:,2] = mask*down_left
         conn[:,:,:,3] = mask*right
@@ -214,14 +215,14 @@ class Losses: #class to handle those losses
         return conn
     
     @tf.function
-    def tf_sal2conn(self, mask):
+    def tf_sal2conn(self, mask): #the tf function of sal2conn
         #start  = time.time()
         output = tf.numpy_function(self.sal2conn, [mask], tf.float32) 
         #stop   = time.time()
         #print("Esp Time For tf_sal2conn : ", stop - start)
         return output 
 
-    def numpy_full_like(self, x, y):
+    def numpy_full_like(self, x, y): #same shape check 
         return np.full_like(x, y)
     
     @tf.function
