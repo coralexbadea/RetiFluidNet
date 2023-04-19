@@ -17,7 +17,7 @@ class Results: # class responsible for results
     def recall(self, predictions, labels):  # function for recall
         #print("recall")      
         recall_ = {}            #recall computed here
-        print("labels here!!!",labels.shape)
+        print("labels here!!!",labels)
         for i in range(labels.shape[-1]):             # for each label
             label_1D = K.flatten(labels[:, :, i])
             pred_1D  = K.flatten(predictions[:, :, i])
@@ -110,7 +110,7 @@ class Results: # class responsible for results
     def results_per_layer(self, predictions, val_data):
         
         predictions = np.array(predictions)
-        print(predictions.shape)
+        print("prediction1",predictions)
         predictions = np.squeeze(predictions)
         num_samples, W, H, C = predictions.shape
         pred_data = np.zeros(shape = (num_samples, 256, 256, 4))
@@ -151,7 +151,11 @@ class Results: # class responsible for results
             labels_.append(tf.keras.backend.one_hot(tf.cast(label, 'int32'),num_classes = 4)) 
         print("\n") 
         print("labels_ shape:->>",labels_.shape)  
-        for predicted_mask in tqdm(range(predictions.shape[0])):
+        for i,predicted_mask in tqdm(range(predictions.shape[0])):
+            if(i==7):
+                print("predicted_mask HERE:")
+                print(predicted_mask)
+                rahat_turcesc = predicted_mask
             acc_value.append(self.accuracy(predictions[predicted_mask], labels_[predicted_mask]))
             f1_score_value.append(self.f1_score(predictions[predicted_mask], labels_[predicted_mask]))
             precision_value.append(self.precision(predictions[predicted_mask], labels_[predicted_mask]))

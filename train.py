@@ -140,13 +140,13 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
             fig.savefig(dataset_name+"\model_%s_history.png"%i, dpi=300)
         
         
-        # val_data = val_data.take(900)
+        val_data = val_data.take(32)
         
         predictions = []
         for image, mask in tqdm(val_data):  
             temp = model.predict(image)[:, :, :, 0:32]
             predictions.append(temp)
-        print("predictions shape : " , predictions.shape)
+        print("predictions: " , predictions)
         acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean = my_results.results_per_layer(predictions, val_data)
         overall_results.append([acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean])
     
