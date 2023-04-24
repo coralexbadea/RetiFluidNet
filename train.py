@@ -126,7 +126,7 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
             
             axs[0].set_title('Model Loss')
             axs[0].plot(history.history['loss'], label='train')
-            axs[0].plot(history.history['val_loss'], label='val')
+            # axs[0].plot(history.history['val_loss'], label='val')
             axs[0].legend()
             axs[0].set(xlabel='Epoch', ylabel='Overall-Loss')
             
