@@ -74,7 +74,6 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
         train_data = train_data.shuffle(buffer_size=BUFFER_SIZE, seed=SEED).batch(BATCH_SIZE).prefetch(buffer_size = AUTOTUNE) #batch and prefetch using AUTOTUNE
         val_data = val_data.batch(1).prefetch(buffer_size = AUTOTUNE) #BZ of 1 and AUTOTUNE prefetch
         
-        train_data = train_data.take(42)
         # with strategy.scope():
         model = retiFluidNet() # model of retifluidnet
         model.summary() #summary
