@@ -147,7 +147,8 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
         for image, mask in tqdm(val_data):  
             temp = model.predict(image)[:, :, :, 0:32]
             predictions.append(temp)
-        print("predictions: " , predictions)
+        
+        print("predictions: " , predictions[0])
         acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean = my_results.results_per_layer(predictions, val_data)
         overall_results.append([acc_mean, dice_mean, f1_score_mean, precision_mean, bacc_mean, recall_mean, iou_mean])
     
