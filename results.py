@@ -151,7 +151,7 @@ class Results: # class responsible for results
             labels_.append(tf.keras.backend.one_hot(tf.cast(label, 'int32'),num_classes = 4)) 
         print("\n") 
         print("labels_0 shape:->>",labels_[0].shape)  
-        for i,predicted_mask in tqdm(range(predictions.shape[0])):
+        for predicted_mask,_ in tqdm(enumerate(predictions)):
             if(i==7):
                 print("predicted_mask HERE:")
                 print(predicted_mask)
