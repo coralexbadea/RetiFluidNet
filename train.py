@@ -74,6 +74,7 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
         train_data = train_data.shuffle(buffer_size=BUFFER_SIZE, seed=SEED).batch(BATCH_SIZE).prefetch(buffer_size = AUTOTUNE) #batch and prefetch using AUTOTUNE
         val_data = val_data.batch(1).prefetch(buffer_size = AUTOTUNE) #BZ of 1 and AUTOTUNE prefetch
         
+        train_data = train_data.take(42)
         # with strategy.scope():
         model = retiFluidNet() # model of retifluidnet
         model.summary() #summary
@@ -131,8 +132,8 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
             axs[0].set(xlabel='Epoch', ylabel='Overall-Loss')
             
             axs[1].set_title('Model Dice Performance')
-            axs[1].plot(history.history['main_output_dice_coeff'], label='train')
-            axs[1].plot(history.history['val_main_output_dice_coeff'], label='val')
+            # axs[1].plot(history.history['main_output_dice_coeff'], label='train')
+            # axs[1].plot(history.history['val_main_output_dice_coeff'], label='val')
             axs[1].legend() 
             axs[1].set(xlabel='Epoch', ylabel='Main output dice_coeff')
             
