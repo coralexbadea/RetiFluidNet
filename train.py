@@ -39,8 +39,8 @@ do_continue = False # continue
 last_epoch = 20 #last_epoch
 
 SEED = 100
-NUM_EPOCHS = 1
-BATCH_SIZE = 1#*nb_GPUs
+NUM_EPOCHS = 20
+BATCH_SIZE = 32#*nb_GPUs
 BUFFER_SIZE = 10000
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
