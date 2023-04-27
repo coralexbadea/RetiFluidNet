@@ -40,7 +40,7 @@ last_epoch = 20 #last_epoch
 
 SEED = 100
 NUM_EPOCHS = 20
-BATCH_SIZE = 8#*nb_GPUs
+BATCH_SIZE = 4#*nb_GPUs
 BUFFER_SIZE = 10000
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
