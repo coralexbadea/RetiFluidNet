@@ -106,7 +106,7 @@ for train_path, val_path in kf.split(data_path): # train_path, val path
             history = model.fit(train_data,
                                 epochs=NUM_EPOCHS,
                                 callbacks=[ival, lr_scheduler])
-            model.save('/content/drive/MyDrive/Models'+"/model_%s_epoch%s.hdf5"%(i,NUM_EPOCHS))
+            model.save("model_%s_epoch%s.hdf5"%(i,NUM_EPOCHS))
             with open(dataset_name+"/model_%s_history.npy"%i, 'wb') as f:
                 np.save(f, history.history)
         else:
